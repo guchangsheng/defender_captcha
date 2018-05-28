@@ -1,0 +1,32 @@
+{
+    "name": "defender/captcha-lumen",
+    "description": "captcha for lumen",
+    "keywords": ["lumen Captcha", "Captcha", "Captcha for api"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "defender",
+            "email": "281759286@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "ext-gd": "*",
+        "illuminate/config": "~5.0",
+        "illuminate/filesystem": "~5.0",
+        "illuminate/support": "~5.0",
+        "illuminate/hashing": "~5.0",
+        "intervention/image": "~2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yangbx\\CaptchaLumen\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "minimum-stability": "dev"
+}
