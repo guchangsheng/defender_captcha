@@ -1,8 +1,8 @@
 <?php
 
-namespace  Defender\CaptchaLumen;
+namespace  Yangbx\CaptchaLumen;
 
-use Defender\CaptchaLumen\Captcha;
+use Yangbx\CaptchaLumen\Captcha;
 use Illuminate\Support\ServiceProvider;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Defender\CaptchaLumen\Facades;
+namespace Yangbx\CaptchaLumen\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
