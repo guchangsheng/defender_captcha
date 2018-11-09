@@ -166,13 +166,14 @@ class Captcha
     )
     {
         $this->captchaConf = config('captcha');
-        $this->sensitive = isset($this->captchaConf['sensitive']) ? $this->captchaConf['sensitive'] : false;
-        $this->files = $files;
-        $this->config = $config;
+
+        $this->sensitive    = isset($this->captchaConf['sensitive']) ? $this->captchaConf['sensitive'] : false;
+        $this->files        = $files;
+        $this->config       = $config;
         $this->imageManager = $imageManager;
-        $this->hasher = $hasher;
-        $this->str = $str;
-        $this->characters = isset($this->captchaConf['captcha_characters']) ? $this->captchaConf['captcha_characters'] : '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ';
+        $this->hasher       = $hasher;
+        $this->str          = $str;
+        $this->characters   = isset($this->captchaConf['captcha_characters']) ? $this->captchaConf['captcha_characters'] : '2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ';
     }
 
     /**
@@ -186,6 +187,7 @@ class Captcha
             foreach($this->captchaConf[$config] as $key => $val)
             {
                 $this->{$key} = $val;
+                #var_dump( $this->{$key});die;
             }
         }
     }
@@ -227,15 +229,15 @@ class Captcha
      */
     public function createById($config = 'default',$captchaId)
     {
-
         $this->backgrounds = $this->files->files(__DIR__ . '/../assets/backgrounds');
-       // var_dump(str_replace('/src','',__DIR__) . '/assets/fonts');die;
-
+        // var_dump(str_replace('/src','',__DIR__) . '/assets/fonts');die;
         $this->fonts = $this->files->files(str_replace('/src','',__DIR__) . '/assets/fonts');
         //var_dump($this->fonts);die;
         $this->fonts = array_values($this->fonts); //reset fonts array index
+
         $this->configure($config);
-        $this->text = $this->generateById($captchaId);
+
+        $this->text   = $this->generateById($captchaId);
         $this->canvas = $this->imageManager->canvas(
             $this->width,
             $this->height,
@@ -348,7 +350,7 @@ class Captcha
      */
     protected function fontSize()
     {
-        return rand($this->image->height() - 10, $this->image->height());
+        return $this->captchaConf['1']['fontSize']??rand($this->image->height() - 10, $this->image->height());
     }
 
     /**
@@ -387,17 +389,20 @@ class Captcha
      */
     protected function lines()
     {
-        for($i = 0; $i <= $this->lines; $i++)
+        if($this->captchaConf['1']['lines']??null)
         {
-            $this->image->line(
-                rand(0, $this->image->width()) + $i * rand(0, $this->image->height()),
-                rand(0, $this->image->height()),
-                rand(0, $this->image->width()),
-                rand(0, $this->image->height()),
-                function ($draw) {
-                    $draw->color($this->fontColor());
-                }
-            );
+            for($i = 0; $i <= $this->lines; $i++)
+            {
+                $this->image->line(
+                    rand(0, $this->image->width()) + $i * rand(0, $this->image->height()),
+                    rand(0, $this->image->height()),
+                    rand(0, $this->image->width()),
+                    rand(0, $this->image->height()),
+                    function ($draw) {
+                        $draw->color($this->fontColor());
+                    }
+                );
+            }
         }
         return $this->image;
     }
