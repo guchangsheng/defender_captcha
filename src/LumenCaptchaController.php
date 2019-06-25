@@ -4,7 +4,7 @@ namespace Yangbx\CaptchaLumen;
 
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller;
-
+use Cache;
 /**
  * Class CaptchaController
  * @package Mews\Captcha
@@ -23,6 +23,12 @@ class LumenCaptchaController extends Controller
 
     public function getCaptcha(Captcha $captcha, $type = 'default', $captchaId)
     {
+        if(!Cache::has($captchaId))
+        {
+            return Response('', 403);
+        }else{
+            Cache::forget($captchaId);
+        }
         return $captcha->createById($type, $captchaId);
     }
 
@@ -36,6 +42,9 @@ class LumenCaptchaController extends Controller
     {
         $urlDomain = substr(str_replace($request->decodedPath(), '', $request->url()), 0, -1);
         $captchaUuid = $this->generate_uuid();
+
+        Cache::put($captchaUuid,md5(uniqid(rand(), true)),5);
+
         $captchaData = [
             'captchaUrl'=>$urlDomain.'/api/captcha/'.$type.'/'.$captchaUuid,
             'captchaUuid'=>(string)$captchaUuid
