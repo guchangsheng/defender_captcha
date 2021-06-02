@@ -40,7 +40,14 @@ class LumenCaptchaController extends Controller
      */
     public function getCaptchaInfo(Request $request, $type = 'default')
     {
-        $urlDomain = substr(str_replace($request->decodedPath(), '', $request->url()), 0, -1);
+        if (!env('docker')) {
+            $urlDomain = substr(str_replace($request->decodedPath(), '', $request->url()), 0, -1);
+        } else {
+            $url = parse_url($request->headers->get('referer'));
+            $urlDomain =  isset($url['scheme']) && !empty($url['scheme']) ?
+                $url['scheme']."://".$url['host'] : $url['host'];
+        }
+        
         $captchaUuid = $this->generate_uuid();
 
         Cache::put($captchaUuid,md5(uniqid(rand(), true)),5);
